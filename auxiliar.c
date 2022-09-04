@@ -5,10 +5,17 @@
 #include "auxiliar.h"
 
 
+// Função que lê agendamento S da entrada padrão,
+// armazena em S e retorna o número de linhas do agendamento
 int leAgendamento(FILE *input, agendamento *S) 
 {
 	int i = 0, limite = 40;
 	*S = (agendamento) malloc(sizeof (transacao) * limite);
+	if (!S)
+	{
+		fprintf(stderr, "Erro: não foi possível alocar agendamento.\n");
+		exit(-1);
+	}
 
 	while (fscanf(input, "%d %d %c %c\n", &(*S)[i].timestamp, &(*S)[i].id_transacao, &(*S)[i].operacao, &(*S)[i].item) == 4)
 	{
@@ -17,8 +24,18 @@ int leAgendamento(FILE *input, agendamento *S)
 		{
 			limite += 5;
 			*S = (agendamento) realloc(*S, sizeof (transacao) * limite);
+			if (!S)
+			{
+				fprintf(stderr, "Erro: não foi possível realocar agendamento.\n");
+				exit(-1);
+			}
 		}
 	}
 	*S = (agendamento) realloc(*S, sizeof (transacao) * i);
+	if (!S)
+	{
+		fprintf(stderr, "Erro: não foi possível realocar agendamento.\n");
+		exit(-1);
+	}
 	return i;
 }

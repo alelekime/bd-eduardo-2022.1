@@ -1,8 +1,6 @@
 #ifndef __AGENDAMENTOS__
 #define __AGENDAMENTOS__
 
-// Definição das estruturas de dados
-
 // Estrura para armazenar os dados de uma transação
 typedef struct
 {
@@ -14,5 +12,8 @@ typedef struct
 
 // Vetor para armazenar um conjunto de transações de um agendamento
 typedef transacao * agendamento;
+
+// FUNÇÕES
+int contaTransacoes(agendamento S, int num_linhas);
 
 #endif

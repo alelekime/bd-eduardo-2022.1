@@ -1,7 +1,7 @@
 #ifndef __AUXILIAR__
 #define __AUXILIAR__
-// Definição das estruturas de dados
 
+// FUNÇÕES
 int leAgendamento(FILE *input, agendamento *S);
 
 #endif 
