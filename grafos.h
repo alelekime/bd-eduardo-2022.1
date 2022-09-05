@@ -16,10 +16,12 @@ typedef struct
 	int n;					// número de vértices
 	int *matriz_adj;		// matriz de adjacência para representar os arcos do grafo
 	estado *estado;			// vetor de estados dos vértices
-	int *ordem_topologica;	// ordenação topológica que será formada caso haja ciclo no grafo
+	int *ordem_topologica;	// vetor de ordenação topológica, que será formada caso haja ciclo no grafo
 } grafo;
 
 // FUNÇÕES
 grafo *criaGrafoTransacoes(agendamento S, int num_linhas, int num_transacoes);
+void buscaProfundidadeVertice(grafo *G, int v);
+int *buscaCiclosTransacoes(grafo *G);
 
 #endif

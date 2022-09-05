@@ -15,5 +15,8 @@ typedef transacao * agendamento;
 
 // FUNÇÕES
 int contaTransacoes(agendamento S, int num_linhas);
+int contaTransacoesEmCiclos(int *ciclos, int num_transacoes);
+int *transacoesConflitantes(int *ciclos, int num_transacoes, int num_ciclos);
+int *transacoesSerializaveis(int *ciclos, int num_transacoes, int num_ciclos);
 
 #endif
