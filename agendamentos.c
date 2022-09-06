@@ -34,6 +34,7 @@ int contaTransacoesEmCiclos(int *ciclos, int num_transacoes)
 int *transacoesConflitantes(int *ciclos, int num_transacoes, int num_ciclos)
 {
 	int *transacoes = (int *) malloc(sizeof (int) * num_ciclos);
+
 	if (!transacoes)
 	{
 		fprintf(stderr, "Erro: não foi possível alocar vetor de transações conflitantes.\n");
@@ -51,6 +52,7 @@ int *transacoesConflitantes(int *ciclos, int num_transacoes, int num_ciclos)
 int *transacoesSerializaveis(int *ciclos, int num_transacoes, int num_ciclos)
 {
 	int *transacoes = (int *) malloc(sizeof (int) * num_ciclos);
+	
 	if (!transacoes)
 	{
 		fprintf(stderr, "Erro: não foi possível alocar vetor de transações serializáveis.\n");

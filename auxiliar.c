@@ -3,11 +3,12 @@
 #include <string.h>
 #include "agendamentos.h"
 #include "auxiliar.h"
+#include "grafos.h"
 
 
 // Função que lê agendamento S da entrada padrão,
 // armazena em S e retorna o número de linhas do agendamento
-int leAgendamento(FILE *input, agendamento *S) 
+int leAgendamentos(FILE *input, agendamento *S) 
 {
 	int i = 0, limite = 40;
 	*S = (agendamento) malloc(sizeof (transacao) * limite);
@@ -32,10 +33,13 @@ int leAgendamento(FILE *input, agendamento *S)
 		}
 	}
 	*S = (agendamento) realloc(*S, sizeof (transacao) * i);
-	if (!S)
-	{
-		fprintf(stderr, "Erro: não foi possível realocar agendamento.\n");
-		exit(-1);
-	}
 	return i;
 }
+
+// Função que imprime IDs das transações no arquivo de saída padrão
+//void imprimeIDs(int *transacoes, int n)
+//{
+//	for (int i = 0; i < n; i++)
+//		fprintf(stdout, "%d%c", transacoes[i] + 1, i + 1 >= n ? ' ' : ',');
+//	return;
+//} 

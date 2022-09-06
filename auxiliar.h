@@ -2,6 +2,7 @@
 #define __AUXILIAR__
 
 // FUNÇÕES
-int leAgendamento(FILE *input, agendamento *S);
+int leAgendamentos(FILE *input, agendamento *S);
+//void imprimeIDs(int *transacoes, int n);
 
 #endif 
