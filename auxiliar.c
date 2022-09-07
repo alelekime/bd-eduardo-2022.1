@@ -37,9 +37,19 @@ int leAgendamentos(FILE *input, agendamento *S)
 }
 
 // Função que imprime IDs das transações no arquivo de saída padrão
-//void imprimeIDs(int *transacoes, int n)
-//{
-//	for (int i = 0; i < n; i++)
-//		fprintf(stdout, "%d%c", transacoes[i] + 1, i + 1 >= n ? ' ' : ',');
-//	return;
-//} 
+void imprimeIDs(agendamento escalonamento, int num_linhas, int num_transacoes)
+{
+	int transacao = escalonamento[0].id_transacao;
+
+	fprintf(stdout, "%d", transacao);
+
+	for (int i = 1; i < num_linhas; i++)
+	{
+		if (escalonamento[i].id_transacao > transacao)
+		{
+			transacao = escalonamento[i].id_transacao;
+			fprintf(stdout, ",%d", transacao);
+		}
+	}
+	return;
+} 

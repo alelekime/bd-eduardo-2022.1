@@ -17,6 +17,21 @@ int contaTransacoes(agendamento S, int num_linhas)
 	return num_transacoes;
 }
 
+// Função que recebe um escalonamento e seu número
+// de linhas e retorna a quantidade de transações
+int contaTransacoesEscalonamento(agendamento S, int num_linhas, int inicio)
+{
+	int num_transacoes = 0;
+	int i = (num_linhas - 1) + inicio;
+
+	while (S[i].operacao == 'C')
+	{	
+		num_transacoes++;
+		i--;
+	}
+	return num_transacoes;
+}
+
 // Função que calcula o número de transações que fazem parte
 // de ciclos em um agendamento S
 int contaTransacoesEmCiclos(int *ciclos, int num_transacoes)
@@ -38,7 +53,7 @@ int *transacoesConflitantes(int *ciclos, int num_transacoes, int num_ciclos)
 	if (!transacoes)
 	{
 		fprintf(stderr, "Erro: não foi possível alocar vetor de transações conflitantes.\n");
-		exit(-4);
+		exit(-5);
 	}
 	int j = 0;
 	for (int i = 0; i < num_transacoes; i++)
@@ -56,7 +71,7 @@ int *transacoesSerializaveis(int *ciclos, int num_transacoes, int num_ciclos)
 	if (!transacoes)
 	{
 		fprintf(stderr, "Erro: não foi possível alocar vetor de transações serializáveis.\n");
-		exit(-5);
+		exit(-6);
 	}
 	int j = 0;
 	for (int i = 0; i < num_transacoes; i++)
