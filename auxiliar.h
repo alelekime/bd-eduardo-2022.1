@@ -3,6 +3,6 @@
 
 // FUNÇÕES
 int leAgendamentos(FILE *input, agendamento *S);
-void imprimeIDs(agendamento S, int num_linhas, int num_transacoes);
+void imprimeIDs(agendamento S, int num_linhas);
 
 #endif 
