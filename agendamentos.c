@@ -17,18 +17,25 @@ int contaTransacoes(agendamento S, int num_linhas)
 	return num_transacoes;
 }
 
+
 // Função que recebe um escalonamento e seu número
 // de linhas e retorna a quantidade de transações
-int contaTransacoesEscalonamento(agendamento S, int num_linhas, int inicio)
+int contaTransacoesEscalonamento(agendamento S, int num_linhas)
 {
 	int num_transacoes = 0;
-	int i = (num_linhas - 1) + inicio;
 
-	while (S[i].operacao == 'C')
-	{	
-		num_transacoes++;
-		i--;
-	}
+	for (int i = 0; i < num_linhas; i++)
+		if (S[i].operacao == 'C')
+			num_transacoes++;
+	//int i = limite;
+	//printf("Limite vale %d\n", i);
+
+	//while (S[i].operacao == 'C')
+	//{	
+	//	num_transacoes++;
+	//	printf("Número de transações na contagem é %d\n", num_transacoes);
+	//	i--;
+	//}
 	return num_transacoes;
 }
 
