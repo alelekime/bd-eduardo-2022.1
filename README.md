@@ -1,6 +1,6 @@
 <h1>Escalonamento de transações</h1>
 
-Implementação em C dos algoritmos de teste de serialidade quanto ao conflito e de visão equivalente para detecção de conflitos de escalonamento de transações concorrentes em SGBD. 
+Implementação, em C, dos algoritmos de teste de serialidade quanto ao conflito e de visão equivalente para detecção de conflitos de escalonamento de transações concorrentes em SGBD. Trabalho desenvolvido por Alessandra Souza da Silva e Marisa Sel Franco para a disciplina CI1218 - Bancos de Dados, ministrada pelo prof. Eduardo Almeida, dos cursos de bacharelado em Ciência da Computação e em Informática Biomédica da UFPR. 
 
 
 ## Algoritmo de teste de seriabilidade quanto ao conflito:
