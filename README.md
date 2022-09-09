@@ -13,7 +13,7 @@ Implementação, em C, dos algoritmos de teste de serialidade quanto ao conflito
 
 ## Algoritmo de visão equivalente:
 
-Dois agendamentos S e S' são ditos visão equivalentes, se atenderem as seguintes condições:
+Dois agendamentos S e S' são ditos visão equivalentes se atenderem as seguintes condições:
 - O mesmo conjunto de transações e operações participam em S e S';
 - Para cada r(x) de Ti, se o valor de x lido ja foi escrito por w(x) de Tj, ou seja, houve W(x) antes de R(x) em transações distintas, o mesmo deve permanecer para r(x) de Ti em S';
 - Se o operador w(y) em Tk é a ultima escrita de y em S, então w(y) em Tk deve ser a última escrita em S'.
