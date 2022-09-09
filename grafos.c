@@ -119,36 +119,3 @@ int *buscaCiclosTransacoes(grafo *G)
 				}
 	return ciclos;
 }
-
-int equivalenciaPorVisao(transacoes *T, int n)
-{
-	char *atbs = (char *)malloc(sizeof(char) * n);
-	int *nAtbs = countAtb((*T), n, atbs);
-
-	int finalIdsWrite[nAtbs[0]];
-	int finalTimeInWrite[nAtbs[0]];
-	int fid = 0;
-	int fti = 0;
-
-	for (int atb = 0; atb < nAtbs[0]; atb++) // para cada diferente atributo encontrado em todas as transações
-	{
-		int findFinal = 0;
-		for (int i = nAtbs[atb + 1] - 1; i >= 0 && !findFinal; i--)
-			if (T[atb][i].op == 'W') // verificar se existe alguma operação de escrita sobre determinado atributo
-			{
-				finalIdsWrite[fid++] = T[atb][i].id;		// guardar o identificador da transação que tenha essa operação de escrita
-				finalTimeInWrite[fti++] = T[atb][i].timeIn; // guardar o tempo de chegada da transação que tenha essa operação de escrita
-				findFinal = 1;								// quebra a repetição
-			}
-	}
-
-	int finalW = 1;
-
-	for (int atb = 0; atb < nAtbs[0]; atb++) // iteração sobre a lista de atributos encontrados
-		for (int t = nAtbs[atb + 1] - 1; t >= 0 && finalW; t--)
-		{ // encontrar duas transações (diferentes IDs), que operem uma escrita sobre um atributo e que não seja a última escrita de determinada transação
-			if ((T[atb][t].timeIn > finalTimeInWrite[atb]) && (T[atb][t].op == 'W') && (T[atb][t].id != finalIdsWrite[atb]))
-				finalW = 0;
-		}
-	return finalW;
-} // FINALIZADA

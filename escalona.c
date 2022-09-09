@@ -72,7 +72,7 @@ int main()
         int *ciclos = buscaCiclosTransacoes(grafo_transacoes);
         int num_transacoes_ciclos = contaTransacoesEmCiclos(ciclos, num_transacoes);
         // printf("No escalonamento %d, há %d transações que fazem parte de ciclos\n\n\n", id, num_transacoes_ciclos);  // APAGAR DEPOIS
-        
+
         // se o grafo NÃO tem CICLOS
         if (num_transacoes_ciclos == 0)
         {
@@ -87,14 +87,17 @@ int main()
             fprintf(stdout, "%d ", id);
             imprimeIDs(escalonamento, num_linhas_escalonamento);
             fprintf(stdout, " NS "); // o agendamento NÃO é serializável por conflito
-            int verificaEscritaTrasacao;
             int idEscrita = encontraEscrita(S, num_transacoes);
-            if (idEscrita == -1)
-                fprintf(stdout, " SV "); // o agendamento é equivalente por visão
+            int verificaEscritaTrasacao = verificaEscrita(S, idEscrita);
+
+            if (!verificaEscritaTrasacao)
+                if (equivalenciaPorVisao(&S, num_transacoes))
+                    fprintf(stdout, "SV\n"); // SV se o retorno da função for 1
+                else
+                    fprintf(stdout, "NV\n"); // o agendamento é equivalente por visão
             else
             {
-                verificaEscritaTrasacao = verificaEscrita(S, idEscrita);
-
+                fprintf(stdout, "NV\n"); // caso encontre alguma transação que tenha sido realizado uma operação de leitura (antes uma operação de escrita), o escalonamento impresso na linha 45, conceitualmente, não é equivalente por visão (NV)
             }
 
             fprintf(stdout, "\n"); // APAGAR APÓS INSERIR ANÁLISE E SAÍDA DA EQUIVALÊNCIA POR VISÃO

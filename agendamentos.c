@@ -4,80 +4,62 @@
 #include "agendamentos.h"
 #include "auxiliar.h"
 
-// int findChar(char *str, int n, char c)
-// {
-// 	for (int i = 0; i < n; i++)
-// 		if (str[i] == c)
-// 			return i;
-// 	return -1;
-// } // FINALIZADA
+int encontraOperacoes(agendamento S, int num_transacoes, char *operacoes, int *indiceOperacoes)
+{
+	int i, j, k, indice = 0;
+	for (i = 0, k = 0; i < num_transacoes; i++)
+	{
+		if (S[i].operacao != 'C')
+		{
+			for (j = 0; j < num_transacoes; j++)
+				if (operacoes[j] == S[i].operacao)
+				{
+					indice = 1;
+					break;
+				}
+			if (indice)
+				indiceOperacoes[j]++;
+			else
+			{
+				operacoes[k] = S[i].operacao;
+				indiceOperacoes[k]++;
+				k++;
+			}
+		}
+		return k;
+	}
+}
+int equivalenciaPorVisao(agendamento *S, int num_transacoes)
+{
+	char *operacoes = malloc(sizeof(char) * num_transacoes);
+	int *indiceOperacoes = malloc(sizeof(int) * num_transacoes);
+	memset(indiceOperacoes, 0, sizeof(int) * num_transacoes);
+	int numeroOperacoes = encontraOperacoes(*S, num_transacoes, operacoes, indiceOperacoes);
+	int *finalIdsWrite = malloc(sizeof(char) * numeroOperacoes);
+	int *finalTimeInWrite = malloc(sizeof(char) * numeroOperacoes);
+	int fid = 0;
+	int fti = 0;
 
-// int *encontraOperacoes(agendamento S, int *numeroOperacoes, int num_transacoes, char *operacoes, int *indiceOperacoes)
-// {
-// 	int *vcount = (int *)malloc(sizeof(int) * n);
-// 	memset(vcount, 0, sizeof(int) * n);
-
-
-// 	int k = 1;
-
-// 	for (int i = 0; i < n; i++)
-// 	{
-// 		if (T[i].op != 'C')
-// 		{
-// 			int achou = findChar(atb, n, T[i].atb);
-// 			if (achou >= 0)
-// 			{
-// 				vcount[achou]++;
-// 			}
-// 			else
-// 			{
-// 				atb[k] = T[i].atb;
-// 				vcount[k++]++;
-// 			}
-// 		}
-// 	}
-
-// 	vcount[0] = k - 1;
-
-// 	vcount = (int *)realloc(vcount, sizeof(int) * (k));
-// 	return vcount;
-// } // FINALIZADA
-
-// int equivalenciaPorVisao(agendamento *S, int num_transacoes)
-// {
-// 	char *operacoes = malloc(sizeof(char) * num_transacoes);
-// 	int *indiceOperacoes = malloc(sizeof(int) * num_transacoes);
-// 	memset(indiceOperacoes, 0, sizeof(int) * num_transacoes);
-// 	int * numeroOperacoes;
-// 	encontraOperacoes(S, numeroOperacoes, num_transacoes, operacoes, indiceOperacoes);
-
-// 	int finalIdsWrite[indiceOperacoes[0]];
-// 	int finalTimeInWrite[indiceOperacoes[0]];
-// 	int fid = 0;
-// 	int fti = 0;
-
-// 	for (int atb = 0; atb < indiceOperacoes[0]; atb++) // para cada diferente atributo encontrado em todas as transações
-// 	{
-// 		int findFinal = 0;
-// 		for (int i = indiceOperacoes[atb + 1] - 1; i >= 0 && !findFinal; i--)
-// 			if (T[atb][i].op == 'W') // verificar se existe alguma operação de escrita sobre determinado atributo
-// 			{
-// 				finalIdsWrite[fid++] = T[atb][i].id;		// guardar o identificador da transação que tenha essa operação de escrita
-// 				finalTimeInWrite[fti++] = T[atb][i].timeIn; // guardar o tempo de chegada da transação que tenha essa operação de escrita
-// 				findFinal = 1;								// quebra a repetição
-// 			}
-// 	}
-
-// 	int finalW = 1;
-
-// 	for (int atb = 0; atb < indiceOperacoes[0]; atb++) // iteração sobre a lista de atributos encontrados
-// 		for (int t = indiceOperacoes[atb + 1] - 1; t >= 0 && finalW; t--)
-// 		{ // encontrar duas transações (diferentes IDs), que operem uma escrita sobre um atributo e que não seja a última escrita de determinada transação
-// 			if ((T[atb][t].timeIn > finalTimeInWrite[atb]) && (T[atb][t].op == 'W') && (T[atb][t].id != finalIdsWrite[atb]))
-// 				finalW = 0;
-// 		}
-// 	return finalW;
-// } // FINALIZADA
+	for (int atb = 0; atb < numeroOperacoes; atb++) // para cada diferente atributo encontrado em todas as transações
+	{
+		for (int i = indiceOperacoes[atb] - 1; i >= 0; i--)
+			if (S[atb][i].operacao == 'W') // verificar se existe alguma operação de escrita sobre determinado atributo
+			{
+				finalIdsWrite[fid] = S[atb][i].id_transacao;		   // guardar o identificador da transação que tenha essa operação de escrita
+				finalTimeInWrite[fti] = S[atb][i].timestamp; // guardar o tempo de chegada da transação que tenha essa operação de escrita
+				fid++;
+				fti++;
+				i=-1; // quebra a repetição
+			}
+	}
+	for (int atb = 0; atb < numeroOperacoes; atb++) // iteração sobre a lista de atributos encontrados
+		for (int t = indiceOperacoes[atb] - 1; t >= 0; t--)
+		{ // encontrar duas transações (diferentes IDs), que operem uma escrita sobre um atributo e que não seja a última escrita de determinada transação
+			if ((S[atb][t].timestamp > finalTimeInWrite[atb]) && (S[atb][t].operacao == 'W') && (S[atb][t].id_transacao != finalIdsWrite[atb]))
+				return 0;
+		}
+	return 1;
+}
 
 // Função que recebe um agendamento e seu número
 // de linhas e retorna a posicao da escrita ou se nao teve escrita
