@@ -4,6 +4,8 @@
 #include "agendamentos.h"
 #include "auxiliar.h"
 
+// Passa pelas transações achando repetições de atributos e 
+// enumera em um vetor, onde cada posição é um atributo é relacinado ao vetor de atributos.
 int encontraOperacoes(agendamento S, int num_transacoes, char *operacoes, int *indiceOperacoes)
 {
 	int i, j, k, indice = 0;
@@ -12,50 +14,55 @@ int encontraOperacoes(agendamento S, int num_transacoes, char *operacoes, int *i
 		if (S[i].operacao != 'C')
 		{
 			for (j = 0; j < num_transacoes; j++)
-				if (operacoes[j] == S[i].operacao)
+				if (operacoes[j] == S[i].operacao) //compara os indices ja achados 
 				{
 					indice = 1;
 					break;
 				}
 			if (indice)
-				indiceOperacoes[j]++;
+				indiceOperacoes[j]++; // acha as repeticoes
 			else
 			{
-				operacoes[k] = S[i].operacao;
+				operacoes[k] = S[i].operacao; // acha os distintos
 				indiceOperacoes[k]++;
 				k++;
 			}
 		}
-		return k;
+		
 	}
+	return k;
 }
+
+// Essa funcao verifica se w(x) em Tk é a ultima escrita
+// de x em S, então w(x) em Tk deve ser a última escrita em S'
 int equivalenciaPorVisao(agendamento *S, int num_transacoes)
 {
-	char *operacoes = malloc(sizeof(char) * num_transacoes);
-	int *indiceOperacoes = malloc(sizeof(int) * num_transacoes);
-	memset(indiceOperacoes, 0, sizeof(int) * num_transacoes);
-	int numeroOperacoes = encontraOperacoes(*S, num_transacoes, operacoes, indiceOperacoes);
-	int *finalIdsWrite = malloc(sizeof(char) * numeroOperacoes);
-	int *finalTimeInWrite = malloc(sizeof(char) * numeroOperacoes);
+	char *operacoes = malloc(sizeof(char) * num_transacoes); // usado para armazemar os atributos de operacao
+	int *indiceOperacoes = malloc(sizeof(int) * num_transacoes); // usado para armazemar as posicoes das operaccoes
+	memset(indiceOperacoes, 0, sizeof(int) * num_transacoes); // limpa o vetor
+	int numeroOperacoes = encontraOperacoes(*S, num_transacoes, operacoes, indiceOperacoes); // encontra as operacoes distintas e preenche o vetor de posicoes e atributos
+
+	int *escritaIndice = malloc(sizeof(char) * numeroOperacoes); // usado para guardar o indice da transação que escrita
+	int *escritaTimestamp = malloc(sizeof(char) * numeroOperacoes); // usado para guardar o timestamp da transação que escrita
 	int fid = 0;
 	int fti = 0;
 
 	for (int atb = 0; atb < numeroOperacoes; atb++) // para cada diferente atributo encontrado em todas as transações
 	{
 		for (int i = indiceOperacoes[atb] - 1; i >= 0; i--)
-			if (S[atb][i].operacao == 'W') // verificar se existe alguma operação de escrita sobre determinado atributo
+			if (S[atb][i].operacao == 'W') // se existe uma operação de escrita de um atributo especifico
 			{
-				finalIdsWrite[fid] = S[atb][i].id_transacao;		   // guardar o identificador da transação que tenha essa operação de escrita
-				finalTimeInWrite[fti] = S[atb][i].timestamp; // guardar o tempo de chegada da transação que tenha essa operação de escrita
+				escritaIndice[fid] = S[atb][i].id_transacao;		  
+				escritaTimestamp[fti] = S[atb][i].timestamp; 
 				fid++;
 				fti++;
-				i=-1; // quebra a repetição
+				i=-1; // sai do laco
 			}
 	}
-	for (int atb = 0; atb < numeroOperacoes; atb++) // iteração sobre a lista de atributos encontrados
+	for (int atb = 0; atb < numeroOperacoes; atb++) // passa por todos os indices com a condicao da escrita
 		for (int t = indiceOperacoes[atb] - 1; t >= 0; t--)
-		{ // encontrar duas transações (diferentes IDs), que operem uma escrita sobre um atributo e que não seja a última escrita de determinada transação
-			if ((S[atb][t].timestamp > finalTimeInWrite[atb]) && (S[atb][t].operacao == 'W') && (S[atb][t].id_transacao != finalIdsWrite[atb]))
+		{ // se nao for a última escrita de determinada transação, sendo duas transações de ids distintos e que facam uma escrita 
+			if ((S[atb][t].timestamp > escritaTimestamp[atb]) && (S[atb][t].operacao == 'W') && (S[atb][t].id_transacao != escritaIndice[atb]))
 				return 0;
 		}
 	return 1;

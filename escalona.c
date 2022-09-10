@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "agendamentos.h"
 #include "auxiliar.h"
 #include "grafos.h"
@@ -18,9 +19,7 @@ int main()
     agendamento S = NULL;
 
     num_linhas = leAgendamentos(stdin, &S);
-    // printf("Número de linhas da entrada: %d\n", num_linhas); // APAGAR DEPOIS
     num_transacoes = contaTransacoes(S, num_linhas);
-    // printf("Número de transações do agendamento: %d\n", num_transacoes); // APAGAR DEPOIS
 
     int posicao_limite[num_transacoes];
     for (int i = 0; i < num_transacoes; i++)
@@ -49,11 +48,7 @@ int main()
         }
         // cria um escalonamento de fato a partir do agendamento S
         agendamento escalonamento = (agendamento)malloc(sizeof(transacao) * num_linhas);
-        if (!escalonamento)
-        {
-            fprintf(stderr, "Erro: não foi possível alocar escalonamento.\n");
-            exit(-4);
-        }
+        testaInicializacao(escalonamento, "ESCALONAMENTO");
         for (int i = inicio, j = 0; i < (num_linhas + inicio); i++, j++)
         {
             escalonamento[j].timestamp = S[i].timestamp;
@@ -61,24 +56,17 @@ int main()
             escalonamento[j].operacao = S[i].operacao;
             escalonamento[j].item = S[i].item;
         }
-
-        /*printf("Escalonamento %d tem %d linhas\n\n", id, num_linhas_escalonamento); // APAGAR DEPOIS
-        for (int i = 0; i < num_linhas_escalonamento; i++){
-            printf("%d %d %c %c \n", escalonamento[i].timestamp, escalonamento[i].id_transacao, escalonamento[i].operacao, escalonamento[i].item);
-        }*/
         num_transacoes = contaTransacoesEscalonamento(escalonamento, num_linhas_escalonamento);
-        // printf("Número de transações do escalonamento: %d\n", num_transacoes); // APAGAR DEPOIS
         grafo *grafo_transacoes = criaGrafoTransacoes(escalonamento, num_linhas_escalonamento, num_transacoes);
         int *ciclos = buscaCiclosTransacoes(grafo_transacoes);
         int num_transacoes_ciclos = contaTransacoesEmCiclos(ciclos, num_transacoes);
-        // printf("No escalonamento %d, há %d transações que fazem parte de ciclos\n\n\n", id, num_transacoes_ciclos);  // APAGAR DEPOIS
 
         // se o grafo NÃO tem CICLOS
         if (num_transacoes_ciclos == 0)
         {
             fprintf(stdout, "%d ", id);
             imprimeIDs(escalonamento, num_linhas_escalonamento);
-            fprintf(stdout, " SS SV\n"); // o agendamento é serializável por conflito e por visão
+            fprintf(stdout, " .SS SV\n"); // o agendamento é serializável por conflito e por visão
         }
         // se o grafo TEM CICLOS
         else
@@ -94,13 +82,11 @@ int main()
                 if (equivalenciaPorVisao(&S, num_transacoes))
                     fprintf(stdout, "SV\n"); // SV se o retorno da função for 1
                 else
-                    fprintf(stdout, "NV\n"); // o agendamento é equivalente por visão
+                    fprintf(stdout, "NV\n"); // não é equivalente por visão
             else
             {
-                fprintf(stdout, "NV\n"); // caso encontre alguma transação que tenha sido realizado uma operação de leitura (antes uma operação de escrita), o escalonamento impresso na linha 45, conceitualmente, não é equivalente por visão (NV)
+                fprintf(stdout, "NV\n"); // operação de leitura antes uma operação de escrita, não é equivalente por visão
             }
-
-            fprintf(stdout, "\n"); // APAGAR APÓS INSERIR ANÁLISE E SAÍDA DA EQUIVALÊNCIA POR VISÃO
         }
         free(escalonamento);
     }

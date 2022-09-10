@@ -15,7 +15,7 @@ typedef transacao *agendamento;
 
 // FUNÇÕES
 int encontraOperacoes(agendamento S, int num_transacoes, char *operacoes, int *indiceOperacoes);
-	int equivalenciaPorVisao(agendamento *S, int num_transacoes);
+int equivalenciaPorVisao(agendamento *S, int num_transacoes);
 int encontraEscrita(agendamento S, int num_transacoes);
 int verificaEscrita(agendamento S, int idEscrita);
 int contaTransacoes(agendamento S, int num_linhas);
