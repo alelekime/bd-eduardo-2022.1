@@ -78,6 +78,7 @@ int main()
             fprintf(stdout, "%d ", id);
             imprimeIDs(escalonamento, num_linhas_escalonamento, num_transacoes);
             fprintf(stdout, " NS "); // o agendamento NÃO é serializável por conflito
+            // início da análise de equivalência por visão
             int idEscrita = encontraEscrita(S, num_transacoes);
             int verificaEscritaTrasacao = verificaEscrita(S, idEscrita);
 
