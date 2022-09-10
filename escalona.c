@@ -17,10 +17,12 @@ int main()
 {
     int id, num_linhas = 0, num_transacoes = 0, num_escalonamentos = 0, num_linhas_escalonamento = 0, inicio = 0;
     agendamento S = NULL;
-
+    
+    // faz a leitura da entrada
     num_linhas = leAgendamentos(stdin, &S);
     num_transacoes = contaTransacoes(S, num_linhas);
-
+    
+    // cria e inicializa vetor para guardar limites de cada escalonamento no agendamento S
     int posicao_limite[num_transacoes];
     for (int i = 0; i < num_transacoes; i++)
         posicao_limite[i] = -1;
@@ -56,11 +58,12 @@ int main()
             escalonamento[j].operacao = S[i].operacao;
             escalonamento[j].item = S[i].item;
         }
+        // início do teste de seriabilidade por conflito
         num_transacoes = contaTransacoesEscalonamento(escalonamento, num_linhas_escalonamento);
         grafo *grafo_transacoes = criaGrafoTransacoes(escalonamento, num_linhas_escalonamento, num_transacoes);
         int *ciclos = buscaCiclosTransacoes(grafo_transacoes);
         int num_transacoes_ciclos = contaTransacoesEmCiclos(ciclos, num_transacoes);
-
+        
         // se o grafo NÃO tem CICLOS
         if (num_transacoes_ciclos == 0)
         {
@@ -68,10 +71,10 @@ int main()
             imprimeIDs(escalonamento, num_linhas_escalonamento, num_transacoes);
             fprintf(stdout, " SS SV\n"); // o agendamento é serializável por conflito e por visão
         }
+        
         // se o grafo TEM CICLOS
         else
         {
-            // análise da serialidade por conflito
             fprintf(stdout, "%d ", id);
             imprimeIDs(escalonamento, num_linhas_escalonamento, num_transacoes);
             fprintf(stdout, " NS "); // o agendamento NÃO é serializável por conflito
@@ -80,12 +83,12 @@ int main()
 
             if (!verificaEscritaTrasacao)
                 if (equivalenciaPorVisao(&S, num_transacoes))
-                    fprintf(stdout, "SV\n"); // SV se o retorno da função for 1
+                    fprintf(stdout, "SV\n"); // o escalonamento é equivalente por visão SV se o retorno da função for 1
                 else
-                    fprintf(stdout, "NV\n"); // não é equivalente por visão
+                    fprintf(stdout, "NV\n"); // o escalonamento não é equivalente por visão
             else
             {
-                fprintf(stdout, "NV\n"); // operação de leitura antes uma operação de escrita, não é equivalente por visão
+                fprintf(stdout, "NV\n"); // se há uma operação de leitura antes uma operação de escrita, o escalonamento não é equivalente por visão
             }
         }
         free(escalonamento);
