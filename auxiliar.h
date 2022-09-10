@@ -11,6 +11,6 @@
 // FUNÇÕES
 void testaInicializacao(bool teste, char *descricao);
 int leAgendamentos(FILE *input, agendamento *S);
-void imprimeIDs(agendamento S, int num_linhas);
-
+int cmpfunc(const void *a, const void *b);
+    void imprimeIDs(agendamento escalonamento, int num_linhas, int num_transacoes);
 #endif

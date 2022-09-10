@@ -65,15 +65,15 @@ int main()
         if (num_transacoes_ciclos == 0)
         {
             fprintf(stdout, "%d ", id);
-            imprimeIDs(escalonamento, num_linhas_escalonamento);
-            fprintf(stdout, " .SS SV\n"); // o agendamento é serializável por conflito e por visão
+            imprimeIDs(escalonamento, num_linhas_escalonamento, num_transacoes);
+            fprintf(stdout, " SS SV\n"); // o agendamento é serializável por conflito e por visão
         }
         // se o grafo TEM CICLOS
         else
         {
             // análise da serialidade por conflito
             fprintf(stdout, "%d ", id);
-            imprimeIDs(escalonamento, num_linhas_escalonamento);
+            imprimeIDs(escalonamento, num_linhas_escalonamento, num_transacoes);
             fprintf(stdout, " NS "); // o agendamento NÃO é serializável por conflito
             int idEscrita = encontraEscrita(S, num_transacoes);
             int verificaEscritaTrasacao = verificaEscrita(S, idEscrita);

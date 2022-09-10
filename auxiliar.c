@@ -26,27 +26,41 @@ int leAgendamentos(FILE *input, agendamento *S)
 		i++;
 	return i;
 }
+// funcao de ordenaçao
+int cmpfunc(const void *a, const void *b)
+{
+	return (*(int *)a - *(int *)b);
+}
 
 // Função que imprime IDs das transações no arquivo de saída padrão
 void imprimeIDs(agendamento escalonamento, int num_linhas, int num_transacoes)
 {
-
+	int i, j, k = 0;
 	int *transasoesDistintas = malloc(sizeof(int) * num_transacoes);
 	transasoesDistintas[0] = escalonamento[0].id_transacao;
 
-	fprintf(stdout, "%d", transacao);
-
-	for (int i = 1; i < num_linhas; i++)
+	fprintf(stdout, "%d", transasoesDistintas[0]);
+	int achou = 1;
+	for (i = 1; i < num_linhas; i++)
 	{
-		for  j = 0; j < num_transacoes; j++)
+		for (j = 0; j < num_transacoes; j++)
 		{
-			if (escalonamento[i].id_transacao > transacao)
+			if (escalonamento[i].id_transacao == transasoesDistintas[j])
 			{
+				k = 1;
+				break;
 			}
-
-		transacao = escalonamento[i].id_transacao;
-		fprintf(stdout, ",%d", transacao);
+		}
+		if (!k)
+		{
+			transasoesDistintas[achou] = escalonamento[i].id_transacao;
+			k = 0;
+			achou++;
 		}
 	}
+	qsort(transasoesDistintas, achou, sizeof(int), cmpfunc);
+
+	for (i = 1; i < achou; i++)
+		fprintf(stdout, ",%d", transasoesDistintas[i]);
 	return;
 }
